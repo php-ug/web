@@ -1,0 +1,31 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+<div id="team">
+	<h3>The team behind PHP.ug</h3>
+	<dl>
+		{% for mail, person in dto %}
+		<dt>{{ gravatar(mail, 100)|raw }}</dt>
+		<dd>
+			<h3>{{ person.name }}</h3>
+			<a alt="Send an email to {{ person.name }}" href="{{ url_for('mailproxy', {'liame': mail|reverse}) }}"><i class="fa-solid fa-envelope fa-2x"></i></a>
+			{% if (person.twitter) %}
+				<a title="Go to the Twitter-account of {{ person.name }}" href="https://twitter.com/{{ person.twitter }}">
+					<i class="fa-twitter fa-2x fa-brands"></i>
+				</a>
+			{% endif %}
+			{% if (person.mastodon) %}
+				<a title="Go to the mastodon-account of {{ person.name }}" href="{{ person.mastodon }}">
+					<i class="fa-mastodon fa-2x fa-brands"></i>
+				</a>
+			{% endif %}
+			{% if (person.github) %}
+				<a title="Go to the github-account of {{ person.name }}" href="https://github.com/{{ person.github }}">
+					<i class="fa-github fa-2x fa-brands"></i>
+				</a>
+			{% endif %}
+		</dd>
+		{% endfor %}
+	</dl>
+</div>
+{% endblock %}

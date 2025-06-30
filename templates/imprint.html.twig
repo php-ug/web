@@ -1,0 +1,21 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+	<section id="imprint">
+		<dl>
+			<dt>Imprint</dt>
+			<dd>
+				This Website for the PHP-Community is run by
+				<address>
+					{{ dto.user }}<br/>
+					{{ dto.address }}<br/>
+					<a alt="Send email to {{ dto.user }}" href="{{ url_for('mailproxy', {'liame': dto.email|reverse}) }}"><i class="fa-envelope fa-solid"></i></a>
+				</address>
+			</dd>
+			<dt>Contact</dt>
+			<dd>You can reach us via our <a href="{{ url_for('contact') }}">Contact-Form</a></dd>
+			<dt>Legal</dt>
+			<dd>See the <a href="{{ url_for('legal') }}">Legal-Stuff</a></dd>
+		</dl>
+	</section>
+{% endblock %}

@@ -1,0 +1,39 @@
+{
+  "name": "phpug",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "file-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "postcss-loader": "^8.1.1",
+    "sass": "^1.89.2",
+    "sass-loader": "^16.0.5",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "bootstrap": "^5.3.6",
+    "fullcalendar": "^6.1.17",
+    "icomoon": "^1.0.0",
+    "jquery": "^3.7.1",
+    "leaflet": "^1.9.4",
+    "leaflet-layerjson": "^0.3.4",
+    "leaflet-search": "^4.0.0",
+    "leaflet.label": "^0.2.4"
+  }
+}

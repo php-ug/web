@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base href="{{ url_for('main') }}">
+	<meta charset="utf-8">
+	<title>PHP-UserGroup - One home for one community</title>
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@phpug" />
+	<meta name="twitter:title" content="PHP.Usergroup" />
+	<meta name="twitter:description" content="One home for one community" />
+	<meta name="twitter:image" content="http://php.ug/img/twitter-card-preview.png" />
+	<meta name="twitter:url" content="http://php.ug" />
+	<link rel="stylesheet" type="text/css" href="lib/main.css"/>
+</head>
+<body data-bs-theme="dark">
+<header class="navbar navbar-dark bg-dark navbar-expand-md fixed-top border-body" role="navigation">
+	<div class="container-fluid">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<a class="navbar-brand" href="{{ url_for('main') }}">PHP.UserGroup</a>
+	<div class="collapse navbar-collapse">
+		<ul class="navbar-nav">
+			<li class="nav-item dropdown{% if is_current_url('main') %} active{% endif %}">
+				<a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					Home
+				</a>
+				<ul class="dropdown-menu">
+					<li>
+						<a class="dropdown-item"
+							href="{{ url_for('main') }}"
+						>Usergroups</a>
+					</li>
+					<li>
+						<a class="dropdown-item"
+							href="{{ url_for('main') }}#mentoring"
+						>Mentoring-PHP</a>
+					</li>
+					<li>
+						<a class="dropdown-item"
+							href="{{ url_for('main') }}#events"
+						>Events</a>
+					</li>
+					<li>
+						<a class="dropdown-item"
+							href="{{ url_for('main') }}#cfp"
+						>Call for Papers</a>
+					</li>
+				</ul>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" target="_blank" href="http://php-ug.github.io/php.ug/">Blog</a>
+			</li>
+			<li class="nav-item{% if is_current_url('contact') %} active{% endif %}">
+				<a class="nav-link" href="{{ url_for('tips') }}">Tips & Tricks</a>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					Features
+				</a>
+				<ul class="dropdown-menu">
+					<li>
+						<a class="dropdown-item" href="/api/v1/calendar/list">
+							Event-List
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href="/feature/calendar">
+							Event-Calendar
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li class="nav-item{% if is_current_url('promote') %} active{% endif %}">
+				<a class="nav-link" href="{{ url_for('promote') }}">
+					Include your Usergroup
+				</a>
+			</li>
+		</ul>
+	</div>
+	</div>
+</header>
+<section class="container content">
+	<div class="row">
+		<div class="span12">
+			{% block content %}{% endblock %}
+		</div>
+	</div>
+</section>
+<footer class="small navbar navbar-dark bg-dark navbar-expand-md fixed-bottom border-body" role="navigation">
+	<div class="container-fluid">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse bottom-collapse">
+		<span class="pull-left navbar-text">© 2011-2025 by</span>
+		<ul class="navbar-nav">
+			<li class="nav-item{% if is_current_url('team') %} active{% endif %}">
+				<a class="nav-link" href="{{ url_for('team') }}">PHP.ug-Team</a>
+			</li>
+			<li class="nav-item{% if is_current_url('imprint') %} active{% endif %}">
+				<a class="nav-link" href="{{ url_for('imprint') }}">Imprint</a>
+			</li>
+			<li class="nav-item{% if is_current_url('contact') %} active{% endif %}">
+				<a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+			</li>
+			<li class="nav-item{% if is_current_url('legal') %} active{% endif %}">
+				<a class="nav-link" href="{{ url_for('legal') }}">Legal</a>
+			</li>
+			<li class="nav-item{% if is_current_url('privacy') %} active{% endif %}">
+				<a class="nav-link" href="{{ url_for('privacy') }}">Data-Privacy</a>
+			</li>
+			<li class="nav-item{% if is_current_url('privacy') %} active{% endif %}">
+				<a class="nav-link" href="{{ url_for('about') }}">About</a>
+			</li>
+			<li class="nav-item dropup">
+				<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+					Chat
+				</a>
+				<ul class="dropdown-menu">
+					<li><a class="dropdown-item"
+						   target="_blank"
+							href="https://discord.com/channels/356354025865740288/862522740052328488/1254868243861209188"
+						>Usergroup-Team</a>
+					</li>
+					<li><a class="dropdown-item"
+						   target="_blank"
+							href="https://discord.gg/nh9QV3u39U"
+						>Get an Invitation</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	</div>
+</footer>
+<script type="text/javascript" src="lib/phpug.js"></script>
+</html>

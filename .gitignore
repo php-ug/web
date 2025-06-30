@@ -1,0 +1,5 @@
+vendor
+frontend/node_modules
+var
+.env
+composer.override.yml

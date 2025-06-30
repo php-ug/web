@@ -1,0 +1,30 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+
+<section class="contact">
+	<h3>Contact us</h3>
+
+	{% if dto.error %}
+		<div class="alert alert-danger" role="alert">
+			{{ dto.error }}
+		</div>
+	{% endif %}
+
+	<form method="post" name="contact" action="/ug/contact" id="contact">
+		<dl>
+			<dt><label for="from">From:</label></dt>
+			<dd><input type="text" name="from" value="{{ dto.from }}"></dd>
+			<dt><label for="subject">Subject:</label></dt>
+			<dd><input type="text" name="subject" value="{{ dto.subject }}"></dd>
+			<dt><label for="body">Your message:</label></dt>
+			<dd><textarea name="body">{{ dto.body }}</textarea></dd>
+			<dt class="zonkos"><label for="country">SPAM-Protection: Please leave this field as it is!</label></dt>
+			<dd class="zonkos"><input type="text" name="country" value=""></dd>
+			<dd>
+				<input type="submit" name="Send" value="Send">
+			</dd>
+		</dl>
+	</form>
+</section>
+{% endblock %}

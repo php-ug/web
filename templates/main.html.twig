@@ -1,0 +1,18 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+<div id="map"></div>
+<form id="custom-control-php">
+	<div class="form-group col-xs-8 col-xs-offset-2 col-md-6 col-md-offset-3">
+		<select class="form-control" multiple="multiple" size="5" id="ugtags" placeholder="Add tags to filter...">        <option>PHP</option>
+			<option>Symfony</option>
+			<option>ZendFramework</option>
+			<option>Laravel</option>
+			<option>Drupal</option>
+			<option>TYPO3</option>
+			<option>Databases</option>
+			<option>WordPress</option>
+		</select>
+	</div>
+</form>
+{% endblock %}
