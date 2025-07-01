@@ -1,0 +1,152 @@
+name: Build and deploy
+
+on:
+    push:
+    release:
+        types: [published]
+jobs:
+    buildBackend:
+        name: Build backend
+        runs-on: ubuntu-latest
+        environment: deploy_on_release
+        steps:
+            - name: "Checkout"
+              uses: "actions/checkout@v4"
+              with:
+                  ref: ${{ github.head_ref || github.ref_name }}
+                  fetch-depth: 100
+            - name: "install PHP and composer"
+              uses: "shivammathur/setup-php@v2"
+              with:
+                  coverage: "none"
+                  extensions: "intl, zip, xml, apcu"
+                  ini-values: "memory_limit=-1"
+                  php-version: "8.4"
+                  tools: "composer"
+            - name: "Export Git repo"
+              run: |
+                  # Remove a possibly existing extraction folder
+                  rm -rf extract
+                  # No that we are sure it's not there, create an empty extraction folder
+                  mkdir extract
+                  # Create an archive from the repository based on the given tag
+                  # and extract that into the just created extraction folder.
+                  git archive --prefix="./" --format=tar ${{ github.head_ref || github.ref_name }}  .| tar xv -C extract/
+                  # Do some shell magic to replace occurrences of the string '%release-tag%'
+                  # with the current release tag in all files within the extraction folder
+                  find extract/ -type f -exec sed -i "s/%release-tag%/:${{ github.head_ref || github.ref_name }}/" {} \;
+                  # Move into the extraction folder
+                  cd extract
+                  # Call composer install to add all your dependencies, prefer the
+                  # distribution ones and create an authoritative and optimized autoloader
+                  composer install --no-dev --prefer-dist -a
+                  # Go back one level
+                  rm -rf frontend compose*
+                  cd ..
+                  # Create the actual archive that you want to deploy
+                  tar cvzf backend-${{ github.head_ref || github.ref_name }}.tgz -C extract/ .
+                  # clean up the extraction folder
+                  rm -rf extract
+            -  uses: actions/upload-artifact@v4
+               with:
+                   name: backend
+                   path: backend-${{ github.head_ref || github.ref_name }}.tgz
+                   retention-days: 1
+
+    buildFrontend:
+        name: "Build Frontend"
+        runs-on: ubuntu-latest
+        environment: deploy_on_release
+        steps:
+            - name: "Checkout"
+              uses: "actions/checkout@v4"
+              with:
+                  ref: ${{ github.head_ref || github.ref_name }}
+                  fetch-depth: 100
+            - name: "install Node"
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20.x'
+            - name: "Export Git repo"
+              run: |
+                  # Remove a possibly existing extraction folder
+                  rm -rf extract
+                  # No that we are sure it's not there, create an empty extraction folder
+                  mkdir extract
+                  # Create an archive from the repository based on the given tag
+                  # and extract that into the just created extraction folder.
+                  git archive --prefix="./" --format=tar ${{ github.head_ref || github.ref_name }}  .| tar xv -C extract/
+                  # Do some shell magic to replace occurrences of the string '%release-tag%'
+                  # with the current release tag in all files within the extraction folder
+                  find extract/ -type f -exec sed -i "s/%release-tag%/:${{ github.head_ref || github.ref_name }}/" {} \;
+                  # Move into the extraction folder
+                  cd extract/frontend
+                  # Call Node.js install to add all your dependencies, prefer the
+                  npm ci
+                  npm run build
+                  # Go back one level
+                  cd ..
+                  rm -rf config src templates vendor frontend compose*
+                  cd ..
+                  # Create the actual archive that you want to deploy
+                  tar cvzf frontend-${{ github.head_ref || github.ref_name }}.tgz -C extract/ .
+                  # clean up the extraction folder
+                  rm -rf extract
+            -  uses: actions/upload-artifact@v4
+               with:
+                   name: frontend
+                   path: frontend-${{ github.head_ref || github.ref_name }}.tgz
+                   retention-days: 1
+
+    buildFrontendContainer:
+        needs: buildFrontend
+        name: "Build Frontend-COntainer"
+
+        runs-on: ubuntu-latest
+        steps:
+            -   name: 'Checkout GitHub Action'
+                uses: actions/checkout@main
+
+            -   name: 'Login to GitHub Container Registry'
+                uses: docker/login-action@v1
+                with:
+                    registry: ghcr.io
+                    username: ${{github.actor}}
+                    password: ${{secrets.GITHUB_TOKEN}}
+
+            -   uses: actions/download-artifact@v4
+                with:
+                    name: frontend
+            -   name: 'Build Inventory Image'
+                run: |
+                    mkdir -p .docker/nginx/build
+                    tar xvzf frontend-${{ github.head_ref || github.ref_name }}.tgz -C .docker/nginx/build
+                    cp .env.dist .env
+                    docker compose build nginx
+                    docker compose push nginx
+    buildBackendContainer:
+        needs: buildBackend
+        name: "Build Backend-COntainer"
+
+        runs-on: ubuntu-latest
+        steps:
+            -   name: 'Checkout GitHub Action'
+                uses: actions/checkout@main
+
+            -   name: 'Login to GitHub Container Registry'
+                uses: docker/login-action@v1
+                with:
+                    registry: ghcr.io
+                    username: ${{github.actor}}
+                    password: ${{secrets.GITHUB_TOKEN}}
+
+            -   uses: actions/download-artifact@v4
+                with:
+                    name: backend
+            -   name: 'Build Inventory Image'
+                run: |
+                    mkdir -p .docker/php/build
+                    tar xvzf backend-${{ github.head_ref || github.ref_name }}.tgz -C .docker/php/build
+                    cp .env.dist .env
+                    docker compose build php
+                    docker compose push php

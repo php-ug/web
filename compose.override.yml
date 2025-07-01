@@ -1,4 +1,12 @@
 services:
     php:
         volumes:
-            -   .:/var/www/php.ug
+            -   .:/var/www/html
+
+    nginx:
+        volumes:
+            -   .:/var/www/html
+    smtp:
+        image: mailhog/mailhog
+        ports:
+            - 8025:8025

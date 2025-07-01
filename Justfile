@@ -2,6 +2,7 @@
 
 export COMPOSE_BAKE := "true"
 
+import '.justfiles/build.Justfile'
 import '.justfiles/docker.Justfile'
 import '.justfiles/init.Justfile'
 
